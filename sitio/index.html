@@ -1,0 +1,187 @@
+<!doctype html>
+<!-- GENERADO por scripts/sitios_modulos.py de Qillqa; no editar -->
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ruray — la base de los editores</title>
+<meta name="description" content="Ruray es la base común de los editores: Tullpu (fotos), Kuyuy (videos) y Awana (piezas). Trae el estudio, con su servidor, sus motores y lo común de las páginas, y su puente a FastAPI para que cada editor monte solo sus rutas, con su cookie y sus páginas.">
+<meta name="theme-color" content="#eef1f8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0c0e14" media="(prefers-color-scheme: dark)">
+<meta property="og:title" content="Ruray — la base de los editores">
+<meta property="og:description" content="Ruray es la base común de los editores: Tullpu (fotos), Kuyuy (videos) y Awana (piezas). Trae el estudio, con su servidor, sus motores y lo común de las páginas, y su puente a FastAPI para que cada editor monte solo sus rutas, con su cookie y sus páginas.">
+<meta property="og:image" content="img/fotos.webp">
+<link rel="icon" href="img/icono.svg" type="image/svg+xml">
+<link rel="stylesheet" href="estilos.css">
+<script>
+  // El tema elegido se aplica antes de pintar para que no parpadee (el mismo en todos los sitios de la plataforma).
+  try { const t = localStorage.getItem('qillqa-tema'); if (t) document.documentElement.dataset.theme = t } catch {}
+</script>
+</head>
+<body>
+<a class="saltar" href="#principal">Saltar al contenido</a>
+
+<header class="menu" id="menu">
+  <a class="menu-marca" href="#inicio" aria-label="Ruray, inicio">
+    <span class="marca-modulo" data-icono="ajustes" aria-hidden="true"></span>Ruray
+  </a>
+  <nav class="menu-nav" aria-label="Secciones">
+    <a href="#pantallas">Recorrido</a><a href="#conexion">Cómo se conecta</a><a href="#funciones">Qué hace</a><a href="#probar">Probar</a><a href="#familia">La familia</a>
+  </nav>
+  <div class="menu-derecha">
+    <button class="menu-boton" id="tema" type="button" aria-label="Cambiar entre tema claro y oscuro" title="Tema claro u oscuro">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path class="sol" d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66 1.41-1.41M4.93 19.07l1.41-1.41m0-11.32L4.93 4.93m14.14 14.14-1.41-1.41M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10Z"/><path class="luna" d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>
+    </button>
+    <a class="boton chico primario" href="https://github.com/achalmed/ruray">Ver en GitHub</a>
+  </div>
+</header>
+
+<main id="principal">
+
+<section class="portada" id="inicio">
+  <div class="portada-texto revelar">
+    <p class="sobre">Software libre · AGPL-3.0 · parte de la plataforma Qillqa</p>
+    <h1>El taller<br><span class="tenue">donde corren los editores.</span></h1>
+    <p class="entrada">Ruray es la base común de los editores: <b>Tullpu</b> (fotos), <b>Kuyuy</b> (videos) y <b>Awana</b> (piezas). Trae el estudio, con su servidor, sus motores y lo común de las páginas, y su puente a FastAPI para que cada editor monte solo sus rutas, con su cookie y sus páginas.</p>
+    <div class="acciones">
+      <a class="boton primario" href="#probar">Probarlo</a>
+      <a class="boton" href="#pantallas">Ver el recorrido</a>
+    </div>
+    <p class="nota-quechua"><i>Ruray</i> significa «hacer, obrar» en quechua.</p>
+  </div>
+  <div class="portada-ventana revelar">
+    <figure class="ventana ventana-flota">
+      <div class="ventana-barra"><span class="ventana-titulo">Ruray · Tullpu</span></div>
+      <img src="img/fotos.webp" alt="Tullpu: El editor de fotos, sobre Ruray" width="1600" height="1000" data-ampliar fetchpriority="high">
+    </figure>
+    <div class="ficha ficha-a vidrio" aria-hidden="true">
+      <span class="ficha-icono verde">✓</span>
+      <div><b>3 editores</b><small>sobre la misma base</small></div>
+    </div>
+    <div class="ficha ficha-b vidrio" aria-hidden="true">
+      <span class="ficha-icono azul">▶</span>
+      <div><b>Cola de video</b><small>un trabajo a la vez</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="cifras revelar" aria-label="Ruray en cifras">
+  <div class="cifra vidrio"><b data-contar="0">0</b><span>capacidades que ofrece a los demás módulos</span></div>
+  <div class="cifra vidrio"><b data-contar="1">1</b><span>que aprovecha si el anfitrión las tiene; sin ellas, sigue funcionando</span></div>
+  <div class="cifra vidrio"><b data-contar="0">0</b><span>importaciones de Qillqa: solo usa Tiqsi</span></div>
+  <div class="cifra vidrio"><b data-contar="2">2</b><span>maneras de usarlo: solo o dentro de una plataforma</span></div>
+</section>
+
+<!-- Recorrido -->
+<section class="seccion" id="pantallas">
+  <div class="encabezado revelar">
+    <p class="sobre">Recorrido</p>
+    <h2>Recorre sus pantallas.</h2>
+    <p>Las capturas son de la demo, con datos ficticios. Elige una pantalla.</p>
+  </div>
+  <div class="escritorio revelar">
+    <nav class="modulos vidrio" id="dock" aria-label="Pantallas de Ruray" role="tablist"></nav>
+    <figure class="ventana ventana-grande" id="ventana-modulo">
+      <div class="ventana-barra">
+        <span class="ventana-titulo" id="modulo-titulo">Ruray</span>
+        <span class="ventana-pasos" aria-hidden="true"><button type="button" id="modulo-ant" aria-label="Pantalla anterior">‹</button><button type="button" id="modulo-sig" aria-label="Pantalla siguiente">›</button></span>
+      </div>
+      <div class="ventana-cuerpo">
+        <img id="modulo-imagen" src="img/fotos.webp" alt="" width="1600" height="1000" data-ampliar loading="lazy">
+      </div>
+    </figure>
+    <aside class="explicacion vidrio" aria-live="polite">
+      <p class="sobre" id="modulo-grupo"></p>
+      <h3 id="modulo-nombre"></h3>
+      <p id="modulo-texto"></p>
+      <ul id="modulo-puntos"></ul>
+    </aside>
+  </div>
+</section>
+
+<!-- Cómo se conecta -->
+<section class="seccion" id="conexion">
+  <div class="encabezado revelar">
+    <p class="sobre">Un módulo de Tiqsi</p>
+    <h2>Solo o dentro de una plataforma.</h2>
+    <p>Ruray declara en su manifiesto lo que necesita, lo que aprovecha y lo que ofrece. Cambia de anfitrión y mira qué se enciende.</p>
+  </div>
+  <div class="conexion revelar">
+    <div class="conexion-panel vidrio">
+      <div class="segmentos" role="radiogroup" aria-label="Anfitrión" id="anfitrion">
+        <button type="button" role="radio" aria-checked="true" data-anfitrion="minimo">Solo</button>
+        <button type="button" role="radio" aria-checked="false" data-anfitrion="qillqa">Dentro de Qillqa</button>
+      </div>
+      <p class="conexion-texto" id="conexion-texto" aria-live="polite"></p>
+    </div>
+    <div class="conexion-grupos" id="conexion-grupos" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- Qué hace -->
+<section class="seccion" id="funciones">
+  <div class="encabezado revelar">
+    <p class="sobre">Qué hace</p>
+    <h2>Ruray, en pocas palabras.</h2>
+  </div>
+  <div class="rejilla revelar" id="rejilla">
+    <article class="funcion vidrio"><span class="icono" data-icono="enchufe"></span><h3>Un editor, un prefijo</h3><p>Cada editor declara su Editor y Ruray le monta sus rutas y su cookie.</p></article>
+    <article class="funcion vidrio"><span class="icono" data-icono="ajustes"></span><h3>El estudio</h3><p>El servidor, los motores (numpy y Pillow) y las plantillas de cortes verticales.</p></article>
+    <article class="funcion vidrio"><span class="icono" data-icono="video"></span><h3>Cola de video</h3><p>Un trabajo a la vez y la orden de ffmpeg armada en un solo lugar.</p></article>
+    <article class="funcion vidrio"><span class="icono" data-icono="foto"></span><h3>Puente con la Mediateca</h3><p>Si el anfitrión ofrece «medios.v2», el selector la incluye y lo exportado entra a ella.</p></article>
+    <article class="funcion vidrio"><span class="icono" data-icono="documentos"></span><h3>Perfil del estudio</h3><p>Dónde viven el banco, el almacén y las salidas.</p></article>
+    <article class="funcion vidrio"><span class="icono" data-icono="codigo"></span><h3>Lo común de las páginas</h3><p>Lo que comparten los tres editores, una sola vez.</p></article>
+  </div>
+</section>
+
+<!-- Probar -->
+<section class="seccion" id="probar">
+  <div class="encabezado revelar">
+    <p class="sobre">Probarlo</p>
+    <h2>En tu computadora.</h2>
+    <p>Requisitos: Python 3.11. Ruray no se arranca solo: lo usan los editores. Para ver uno funcionando, prueba Tullpu, Kuyuy o Awana.</p>
+  </div>
+  <div class="probar revelar">
+    <figure class="ventana terminal">
+      <div class="ventana-barra"><span class="ventana-titulo">Terminal</span>
+        <button class="copiar" type="button" data-copiar="comandos">Copiar</button></div>
+      <pre id="comandos"><code>mkdir plataforma &amp;&amp; cd plataforma
+for r in tiqsi ruray; do git clone https://github.com/achalmed/$r.git; done
+cd ruray
+python3 -m venv .venv &amp;&amp; .venv/bin/pip install -r requirements.txt -e ../tiqsi -e &#x27;.[pruebas]&#x27;
+.venv/bin/python -m pytest -q      <span class="c"># sus pruebas y las del estudio</span></code></pre>
+    </figure>
+    <div class="cuentas vidrio">
+      <h3>Lo usan los editores</h3>
+      <ul class="lista-check"><li><a href="https://achalmed.github.io/tullpu/">Tullpu</a>: fotos</li><li><a href="https://achalmed.github.io/kuyuy/">Kuyuy</a>: videos</li><li><a href="https://achalmed.github.io/awana/">Awana</a>: piezas</li></ul>
+      <a class="boton primario" href="https://github.com/achalmed/ruray">Ver el código en GitHub</a>
+    </div>
+  </div>
+</section>
+
+<!-- La familia -->
+<section class="seccion" id="familia">
+  <div class="encabezado revelar">
+    <p class="sobre">La plataforma Qillqa</p>
+    <h2>Cada pieza, en su propio repositorio.</h2>
+    <p>Todos se conectan por Tiqsi y todos funcionan solos. Cada nombre está en quechua.</p>
+  </div>
+  <div class="familia revelar" id="familia-lista"></div>
+</section>
+
+</main>
+
+<footer class="pie">
+  <p><b>Ruray</b> · la base de los editores · <a href="https://github.com/achalmed/ruray/blob/main/LICENSE">AGPL-3.0</a> · parte de la <a href="https://achalmed.github.io/qillqa/">plataforma Qillqa</a></p>
+  <p>Todas las personas, números y documentos de esta página son ficticios.</p>
+</footer>
+
+<dialog class="visor" id="visor" aria-label="Captura ampliada">
+  <button class="visor-cerrar" type="button" id="visor-cerrar" aria-label="Cerrar">✕</button>
+  <img id="visor-imagen" alt="">
+</dialog>
+
+<script id="datos" type="application/json">{"id": "ruray", "nombre": "Ruray", "pantallas": [{"img": "fotos", "icono": "pincel", "nombre": "Tullpu", "titulo": "El editor de fotos, sobre Ruray", "texto": "Retoque por capas y revelado rápido. Sus páginas viven en su repositorio; las sirve Ruray bajo su prefijo, con su cookie.", "puntos": ["crear_router(Editor(...)) monta solo lo suyo", "Lo común de las páginas viene del estudio", "Exporta a la Mediateca si el anfitrión la ofrece"]}, {"img": "videos", "icono": "video", "nombre": "Kuyuy", "titulo": "El editor de videos, sobre Ruray", "texto": "La línea de tiempo vive en Kuyuy; la cola de video, la orden de ffmpeg y los ajustes por red social son del servidor del estudio, en Ruray.", "puntos": ["Un trabajo de video a la vez", "ffmpeg en la computadora", "Ajustes por red social, en un solo lugar"]}, {"img": "piezas", "icono": "capas", "nombre": "Awana", "titulo": "El editor de piezas, sobre Ruray", "texto": "Las plantillas de la marca al estilo de Canva. Ruray le da el banco de imágenes, el almacén y las salidas del perfil del estudio.", "puntos": ["Banco, almacén y salidas por perfil", "El kit de identidad común", "Su propio registro de piezas"]}], "conexion": {"manifiestos": [{"id": "ruray", "repo": "ruray", "nombre": "Editores (Ruray)", "necesita": [], "aprovecha": ["medios.v2"], "ofrece": []}]}, "plataforma": {"capacidades": {"identidad.v1": "quién entró y con qué papel", "personas.v1": "las personas del equipo", "directorio.v1": "instituciones, autoridades y contactos", "etiquetas.v1": "etiquetas comunes a todo", "pegado.v1": "reconocer lo que se pega", "calendario.v1": "días hábiles y feriados", "avisos.v1": "la campana de avisos", "redaccion.v1": "cómo dice el sistema lo que pasó", "registro.v1": "registrar desde el chat", "push.v1": "notificaciones al celular", "modulos.v1": "qué módulos están encendidos", "mapa.v1": "el mapa de relaciones", "biblioteca.v1": "la biblioteca (Zotero y Calibre)", "credenciales.v1": "las claves guardadas", "documentos.v1": "los documentos oficiales", "relaciones.v1": "qué cita y responde a qué", "proyectos.v1": "los proyectos de ley", "catalogos.v1": "el catálogo legislativo", "semanas.v1": "la semana de representación", "medios.v1": "fotos y videos", "medios.v2": "fotos y videos, con su selección", "piezas.v1": "las piezas de prensa", "rendiciones.v1": "las rendiciones de cuentas", "tareas.v1": "las tareas", "agenda.v1": "la agenda", "vinculos.v1": "vínculos con lo que origina una tarea", "conversaciones.v1": "las conversaciones del chat", "recibidos.v1": "los documentos recibidos"}, "proveedor": {"identidad.v1": "Qillqa", "personas.v1": "Qillqa", "directorio.v1": "Qillqa", "etiquetas.v1": "Qillqa", "pegado.v1": "Qillqa", "calendario.v1": "Qillqa", "avisos.v1": "Qillqa", "redaccion.v1": "Qillqa", "registro.v1": "Qillqa", "push.v1": "Qillqa", "modulos.v1": "Qillqa", "mapa.v1": "Qillqa", "biblioteca.v1": "Qillqa", "credenciales.v1": "Qillqa", "documentos.v1": "Qillqasqa", "relaciones.v1": "Qillqasqa", "proyectos.v1": "Qillqasqa", "catalogos.v1": "Qillqasqa", "semanas.v1": "Qillqasqa", "recibidos.v1": "Punku", "tareas.v1": "Minka", "agenda.v1": "Minka", "vinculos.v1": "Minka", "conversaciones.v1": "Rimay", "medios.v1": "Rikchay", "medios.v2": "Rikchay", "rendiciones.v1": "Yupay", "piezas.v1": "Awana"}, "nucleo": ["identidad.v1", "personas.v1", "directorio.v1", "etiquetas.v1", "pegado.v1", "calendario.v1", "avisos.v1", "redaccion.v1", "registro.v1", "push.v1", "modulos.v1", "mapa.v1", "biblioteca.v1", "credenciales.v1"], "minimo": ["identidad.v1"], "manifiestos": [{"id": "documentos", "repo": "qillqasqa", "nombre": "Gestión documental", "necesita": ["identidad.v1"], "aprovecha": ["directorio.v1", "pegado.v1", "mapa.v1", "credenciales.v1", "etiquetas.v1", "biblioteca.v1"], "ofrece": ["documentos.v1", "relaciones.v1"]}, {"id": "proyectos", "repo": "qillqasqa", "nombre": "Proyectos de ley", "necesita": ["identidad.v1"], "aprovecha": [], "ofrece": ["proyectos.v1", "catalogos.v1"]}, {"id": "representacion", "repo": "qillqasqa", "nombre": "Semana de representación", "necesita": ["identidad.v1"], "aprovecha": ["medios.v2", "pegado.v1"], "ofrece": ["semanas.v1"]}, {"id": "recibidos", "repo": "punku", "nombre": "Mesa de Partes", "necesita": ["identidad.v1"], "aprovecha": ["directorio.v1", "pegado.v1", "calendario.v1", "etiquetas.v1", "modulos.v1", "agenda.v1", "documentos.v1", "relaciones.v1"], "ofrece": ["recibidos.v1"]}, {"id": "tareas", "repo": "minka", "nombre": "Tareas y Agenda", "necesita": ["identidad.v1"], "aprovecha": ["personas.v1", "pegado.v1", "calendario.v1", "etiquetas.v1", "avisos.v1", "documentos.v1", "recibidos.v1"], "ofrece": ["tareas.v1", "agenda.v1", "vinculos.v1"]}, {"id": "chat", "repo": "rimay", "nombre": "Chat", "necesita": ["identidad.v1"], "aprovecha": ["redaccion.v1", "registro.v1", "etiquetas.v1", "push.v1", "catalogos.v1"], "ofrece": ["conversaciones.v1"]}, {"id": "fototeca", "repo": "rikchay", "nombre": "Mediateca", "necesita": ["identidad.v1"], "aprovecha": ["semanas.v1", "etiquetas.v1"], "ofrece": ["medios.v1", "medios.v2"]}, {"id": "rendicion", "repo": "yupay", "nombre": "Rendición de cuentas", "necesita": ["identidad.v1"], "aprovecha": ["semanas.v1", "documentos.v1", "pegado.v1", "calendario.v1"], "ofrece": ["rendiciones.v1"]}, {"id": "piezas", "repo": "awana", "nombre": "Editor de piezas", "necesita": ["identidad.v1"], "aprovecha": ["medios.v2", "pegado.v1"], "ofrece": ["piezas.v1"]}, {"id": "fotos", "repo": "tullpu", "nombre": "Editor de fotos", "necesita": [], "aprovecha": [], "ofrece": []}, {"id": "videos", "repo": "kuyuy", "nombre": "Editor de videos", "necesita": [], "aprovecha": [], "ofrece": []}, {"id": "obs", "repo": "wayra", "nombre": "Kit de transmisiones", "necesita": [], "aprovecha": [], "ofrece": []}, {"id": "observatorio", "repo": "qhawana", "nombre": "Observatorio de datos", "necesita": [], "aprovecha": [], "ofrece": []}]}, "familia": [{"id": "qillqa", "nombre": "Qillqa", "que": "la plataforma que los monta", "icono": "inicio"}, {"id": "tiqsi", "nombre": "Tiqsi", "que": "el contrato entre módulos", "icono": "enchufe"}, {"id": "qillqasqa", "nombre": "Qillqasqa", "que": "documentos y proyectos de ley", "icono": "documentos"}, {"id": "punku", "nombre": "Punku", "que": "mesa de partes", "icono": "puerta"}, {"id": "minka", "nombre": "Minka", "que": "tareas y agenda", "icono": "tareas"}, {"id": "rimay", "nombre": "Rimay", "que": "chat", "icono": "chat"}, {"id": "rikchay", "nombre": "Rikchay", "que": "mediateca", "icono": "foto"}, {"id": "yupay", "nombre": "Yupay", "que": "rendición de cuentas", "icono": "dinero"}, {"id": "ruray", "nombre": "Ruray", "que": "base de los editores", "icono": "ajustes"}, {"id": "tullpu", "nombre": "Tullpu", "que": "editor de fotos", "icono": "pincel"}, {"id": "kuyuy", "nombre": "Kuyuy", "que": "editor de videos", "icono": "video"}, {"id": "awana", "nombre": "Awana", "que": "editor de piezas", "icono": "capas"}, {"id": "wayra", "nombre": "Wayra", "que": "kit de transmisiones", "icono": "antena"}, {"id": "qhawana", "nombre": "Qhawana", "que": "observatorio de datos", "icono": "ojo"}], "pages": "https://achalmed.github.io"}</script>
+<script src="app.js" defer></script>
+</body>
+</html>

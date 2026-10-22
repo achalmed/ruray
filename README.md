@@ -5,6 +5,8 @@ fotos y de videos. Trae el estudio (su servidor, sus motores y sus páginas) y l
 sirva solo sus rutas, con su propia sesión. Es parte de [Tiqsi](https://github.com/achalmed/tiqsi): los editores son
 módulos que funcionan solos o dentro de una plataforma que los monte.
 
+**Recorrido interactivo:** <https://achalmed.github.io/ruray/> (el código del sitio está en [`sitio/`](sitio/)).
+
 ```bash
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -e '.[pruebas]'   # requiere tiqsi
 .venv/bin/python -m pytest -q
