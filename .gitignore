@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+.pytest_cache/
+node_modules/
+web/dist/
+
+# El estudio: su estado de ejecución y su trabajo cuando no hay perfil (con perfil viven en él)
+estudio/editor/servidor/servidor.pid
+estudio/editor/servidor/servidor.log
+estudio/editor/_trabajo/
+estudio/editor/estado-editor/
+estudio/editor/proyectos-media/
+estudio/editor/proyectos-foto/
+estudio/prensa/

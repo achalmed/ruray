@@ -1,0 +1,419 @@
+/* ============================================================================================================
+   estudio-tema.css — TEMA ÚNICO del estudio: editor de piezas (editor.html), editor de medios (media.html) y
+   todo editor que se sume (foto, video, lienzo). Decisión: docs/decisiones.md §2.6.
+
+   Regla: el cromo del estudio es OSCURO y SOBRIO (como Photoshop, Kdenlive o CapCut: la interfaz no compite con
+   la imagen). Grafito neutro, sin tinte rojizo ni negro puro; el VINO de la marca es el ÚNICO acento; el dorado
+   oscuro solo para destacar y avisar. Ningún color se escribe aquí ni en los editores: todos salen de
+   tokens/colors.json (bloque generado de abajo; `python3 adaptadores/generar.py actualizar --aplicar`).
+   Código nuevo usa SOLO las variables --est-* y las clases .est-*; las --ui-* del final son compatibilidad.
+
+   TOKENS (--est-…)
+     superficies   sup-0 pozo del lienzo · sup-1 fondo de la aplicación y barra de estado · sup-2 paneles y
+                   cabecera · sup-3 tarjetas, menús y secciones · sup-4 controles (campos, botones);
+                   sup-hover y sup-activo para los estados
+     bordes        borde (divisores) · borde-control · borde-fuerte
+     texto         texto · texto-2 (secundario) · texto-3 (tenue; AA hasta sup-4) · texto-off (inactivo) ·
+                   texto-sobre-acento
+     acento        acento (relleno: botón primario, clip elegido) · acento-hover · acento-linea (indicadores,
+                   foco, ícono activo; ≥ 3:1) · acento-suave (velo de lo elegido) · acento-texto
+     estados       aviso / aviso-suave (dorado oscuro: destacar y avisar) · peligro / peligro-relleno ·
+                   exito / exito-suave · seleccion / seleccion-suave (tiradores sobre el lienzo, nunca en el cromo)
+     forma         radio-sm 4px · radio 6px · radio-redondo; esp-05…esp-6 (2–32px); sombra-menu, sombra-modal,
+                   sombra-lienzo; foco (anillo)
+     tipografía    fuente (la de la interfaz de Qillqa, sin descargas) · fuente-mono · fs-xs 11 · fs-sm 12 ·
+                   fs-base 13 · fs-md 14 · fs-lg 16 · peso-medio · peso-fuerte
+     medidas       alto-cabecera 44 · alto-estado 26 · alto-control 28 · alto-control-sm 24 · ancho-riel 48 ·
+                   ancho-panel-izq 280 · ancho-panel-der 288 · alto-pista 44 · ancho-cabeza-pista 168
+     lienzo        damero-a, damero-b, damero-tam (fondo de transparencia sutil)
+
+   COMPONENTES (.est-…; un modificador = .on, [aria-pressed=true] o :disabled)
+     .est-cabecera (+ __titulo, __sub)        barra superior grafito, calma (va bajo la barra vino de Qillqa)
+     .est-sep · .est-grupo · .est-empuje      separador vertical, grupo de herramientas, empuje flexible
+     .est-boton (+ --primario, --fantasma, --icono, --sm)   botón de herramienta; .ico dentro
+     .ico (+ --sm, --lg)                       ícono SVG en línea de estudio-iconos.js (currentColor)
+     .est-riel / .est-riel__boton              riel izquierdo de herramientas con indicador de acento
+     .est-panel (+ __cabecera, __titulo, __cuerpo) · .est-seccion (+ __titulo)   paneles y sus secciones
+     .est-pestanas / .est-pestana              pestañas con subrayado de acento
+     .est-segmentado                           control segmentado (botones hijos; .on)
+     .est-campo · .est-fila (+ label)          campos y filas etiqueta–control; input/select/textarea base
+     input[type=range]                         deslizador sobrio (pista grafito, relleno de acento vía --valor)
+     .est-menu (+ __item, __sep)               menú contextual o desplegable
+     .est-chip (+ .on) · .est-insignia         filtros y contadores
+     .est-modal-fondo / .est-modal             diálogo
+     .est-nota · .est-caja-aviso · .est-caja-exito   textos de ayuda y avisos (siempre con ícono y texto)
+     .est-lienzo                               área de trabajo con damero sutil
+     .est-estado                               barra de estado inferior
+     .est-linea-tiempo, .est-regla-tiempo, .est-pista (+ __cabeza, __carril), .est-clip (+ .sel),
+     .est-cabezal                              base de la línea de tiempo (pistas tipo Kdenlive/CapCut)
+     .est-toast · kbd · barras de desplazamiento
+   ============================================================================================================ */
+:root{
+  /* tokens-color:inicio — GENERADO por adaptadores/generar.py desde tokens/colors.json; no editar: se regenera */
+  /* ---- COLOR · escala Puka (rojo cochinilla) ---- */
+  --puka-50:#FBEDEF; --puka-100:#F6D8DC; --puka-200:#EFB0B9; --puka-300:#E58292;
+  --puka-400:#D9506A; --puka-500:#C42B49; --puka-600:#A6122E; --puka-700:#8A0F27;
+  --puka-800:#6E0F22; --puka-900:#4E0A18;
+
+  /* ---- COLOR · escala Q'illu (amarillo maíz) ---- */
+  --qillu-50:#FDF6E3; --qillu-100:#FAECC4; --qillu-200:#F5DE97; --qillu-300:#F0CB5B;
+  --qillu-400:#EAB61E; --qillu-500:#C99614; --qillu-600:#A67B10; --qillu-700:#83600D;
+  --qillu-800:#5F450B; --qillu-900:#3E2D08;
+
+  /* ---- COLOR · neutros cálidos ---- */
+  --neutral-100:#F5F1EC; --neutral-200:#E9E2D9; --neutral-300:#DCD2C6; --neutral-400:#C9BFB4;
+  --neutral-500:#A99E92; --neutral-600:#8A8079; --neutral-700:#6E655D; --neutral-800:#524B45;
+  --neutral-900:#241F1C;
+
+  /* ---- COLOR · fondos ---- */
+  --fondo-papel:#F5F1EC; --fondo-blanco:#FFFFFF; --fondo-vino:#6E0F22; --fondo-tinta:#241F1C;
+
+  /* ---- COLOR · funcionales (NO marca; siempre con ícono y texto) ---- */
+  --func-exito:#2E7D32; --func-aviso:#EAB61E; --func-error:#A6122E; --func-info-data-only:#4A5A66;
+
+  /* ---- COLOR · datos: serie categórica, en orden (gráficos; etiqueta directa) ---- */
+  --datos-1:#A6122E; --datos-2:#A67B10; --datos-3:#002E6C; --datos-4:#22949F;
+  --datos-5:#8176F1; --datos-6:#636363;
+
+  /* ---- COLOR · datos: divergente ---- */
+  --datos-div-1:#A6122E; --datos-div-2:#F5F1EC; --datos-div-3:#241F1C;
+
+  /* ---- COLOR · excepcionales (NO marca: alertas, campañas; ver colors.json) ---- */
+  --exc-rojo-vivo:#E30613; --exc-rojo-vivo-profundo:#8E0510; --exc-rojo-vivo-suave:#C10510; --exc-rosa-vivo:#FFCED2;
+  --exc-rojo-puro:#FF0000; --exc-rojo-puro-suave:#D60000; --exc-rosa-puro:#FFD6D6; --exc-rosa-claro:#FFE8EA;
+  --exc-crema:#FFF6D6; --exc-oro-vivo:#FFC400; --exc-negro:#000000; --exc-tinta-luto:#3A322D;
+  --exc-tinta-profunda:#1A1614;
+
+  /* ---- COLOR · interfaz del estudio: grafito (cromo de las herramientas, NO de las piezas) ---- */
+  --grafito-950:#111214; --grafito-900:#16171A; --grafito-850:#1B1C1F; --grafito-800:#212226;
+  --grafito-750:#27292D; --grafito-700:#2E3035; --grafito-650:#373A40; --grafito-600:#44474E;
+  --grafito-500:#5C6069; --grafito-400:#8E939B; --grafito-300:#A9ADB5; --grafito-200:#CBCED4;
+  --grafito-100:#E6E8EB;
+
+  /* ---- COLOR · interfaz del estudio: estados sobre grafito ---- */
+  --interfaz-seleccion:#4A90E2; --interfaz-exito:#5DB37E;
+  /* tokens-color:fin */
+}
+
+:root{
+  color-scheme:dark;
+
+  /* ---- superficies (de lo más hondo a lo más alto) ---- */
+  --est-sup-0:var(--grafito-950);
+  --est-sup-1:var(--grafito-900);
+  --est-sup-2:var(--grafito-850);
+  --est-sup-3:var(--grafito-800);
+  --est-sup-4:var(--grafito-750);
+  --est-sup-hover:var(--grafito-700);
+  --est-sup-activo:var(--grafito-650);
+
+  /* ---- bordes ---- */
+  --est-borde:var(--grafito-750);
+  --est-borde-control:var(--grafito-650);
+  --est-borde-fuerte:var(--grafito-600);
+
+  /* ---- texto (WCAG AA sobre sup-0…sup-4; tests/test_paleta.py) ---- */
+  --est-texto:var(--grafito-100);
+  --est-texto-2:var(--grafito-300);
+  --est-texto-3:var(--grafito-400);
+  --est-texto-off:var(--grafito-500);
+  --est-texto-sobre-acento:var(--fondo-blanco);
+
+  /* ---- acento: el vino de la marca, único ---- */
+  --est-acento:var(--puka-700);
+  --est-acento-hover:var(--puka-600);
+  --est-acento-linea:var(--puka-400);
+  --est-acento-suave:color-mix(in srgb,var(--puka-600) 22%,transparent);
+  --est-acento-texto:var(--puka-300);
+
+  /* ---- estados ---- */
+  --est-aviso:var(--qillu-500);
+  --est-aviso-suave:color-mix(in srgb,var(--qillu-500) 14%,transparent);
+  --est-peligro:var(--puka-300);
+  --est-peligro-relleno:var(--puka-600);
+  --est-exito:var(--interfaz-exito);
+  --est-exito-suave:color-mix(in srgb,var(--interfaz-exito) 14%,transparent);
+  --est-seleccion:var(--interfaz-seleccion);
+  --est-seleccion-suave:color-mix(in srgb,var(--interfaz-seleccion) 14%,transparent);
+
+  /* ---- forma ---- */
+  --est-radio-sm:4px;
+  --est-radio:6px;
+  --est-radio-redondo:999px;
+  --est-esp-05:2px; --est-esp-1:4px; --est-esp-2:8px; --est-esp-3:12px; --est-esp-4:16px; --est-esp-5:24px; --est-esp-6:32px;
+  --est-sombra-menu:0 10px 28px color-mix(in srgb,var(--exc-negro) 50%,transparent);
+  --est-sombra-modal:0 24px 64px color-mix(in srgb,var(--exc-negro) 60%,transparent);
+  --est-sombra-lienzo:0 0 0 1px color-mix(in srgb,var(--fondo-blanco) 6%,transparent),
+                      0 14px 44px color-mix(in srgb,var(--exc-negro) 55%,transparent);
+  --est-foco:0 0 0 2px var(--est-acento-linea);
+
+  /* ---- tipografía: la misma de la interfaz de Qillqa (frontend/src/theme.ts), sin descargas ---- */
+  --est-fuente:"Segoe UI","Helvetica Neue",Arial,sans-serif;
+  --est-fuente-mono:"Cascadia Mono","DejaVu Sans Mono",Menlo,Consolas,monospace;
+  --est-fs-xs:11px; --est-fs-sm:12px; --est-fs-base:13px; --est-fs-md:14px; --est-fs-lg:16px;
+  --est-peso-medio:500; --est-peso-fuerte:600;
+
+  /* ---- medidas ---- */
+  --est-alto-cabecera:44px;
+  --est-alto-estado:26px;
+  --est-alto-control:28px;
+  --est-alto-control-sm:24px;
+  --est-ancho-riel:48px;
+  --est-ancho-panel-izq:280px;
+  --est-ancho-panel-der:288px;
+  --est-alto-pista:44px;
+  --est-ancho-cabeza-pista:168px;
+
+  /* ---- lienzo ---- */
+  --est-damero-a:var(--grafito-900);
+  --est-damero-b:var(--grafito-950);
+  --est-damero-tam:16px;
+}
+
+/* =============================== base =============================== */
+html,body{background:var(--est-sup-1); color:var(--est-texto);}
+body{font-family:var(--est-fuente); font-size:var(--est-fs-base); line-height:1.45;
+  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
+::selection{background:var(--est-acento-suave); color:var(--est-texto);}
+:focus-visible{outline:2px solid var(--est-acento-linea); outline-offset:1px;}
+button:focus:not(:focus-visible){outline:none;}
+
+*{scrollbar-width:thin; scrollbar-color:var(--est-borde-fuerte) transparent;}
+::-webkit-scrollbar{width:10px; height:10px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--est-borde-control); border-radius:var(--est-radio-redondo);
+  border:2px solid transparent; background-clip:padding-box;}
+::-webkit-scrollbar-thumb:hover{background:var(--est-borde-fuerte); background-clip:padding-box;}
+::-webkit-scrollbar-corner{background:transparent;}
+
+.ico{width:16px; height:16px; flex:none; display:inline-block; vertical-align:-3px; fill:none;
+  stroke:currentColor; stroke-width:1.75; stroke-linecap:round; stroke-linejoin:round;}
+.ico--sm{width:14px; height:14px; vertical-align:-2px;}
+.ico--lg{width:20px; height:20px; vertical-align:-5px;}
+
+kbd{font:var(--est-peso-fuerte) var(--est-fs-xs)/1.4 var(--est-fuente-mono); color:var(--est-texto-2);
+  background:var(--est-sup-4); border:1px solid var(--est-borde-control); border-bottom-width:2px;
+  border-radius:var(--est-radio-sm); padding:0 5px;}
+
+/* ======================= campos y deslizadores ======================= */
+.est-campo,
+:is(input:not([type=range],[type=color],[type=checkbox],[type=radio],[type=file]),select,textarea){
+  font:inherit; font-size:var(--est-fs-base); color:var(--est-texto); background:var(--est-sup-1);
+  border:1px solid var(--est-borde-control); border-radius:var(--est-radio); padding:4px 8px;
+  min-height:var(--est-alto-control); outline:none; transition:border-color .12s,box-shadow .12s;}
+:where(input,textarea)::placeholder{color:var(--est-texto-off);}
+.est-campo:hover,:where(input:not([type=range],[type=color],[type=checkbox],[type=radio]),select,textarea):hover{border-color:var(--est-borde-fuerte);}
+.est-campo:focus,:where(input,select,textarea):focus{border-color:var(--est-acento-linea);
+  box-shadow:0 0 0 1px var(--est-acento-linea); outline:none;}
+:where(input[type=number]){font-variant-numeric:tabular-nums;}
+:where(select){cursor:pointer;}
+select option{background:var(--est-sup-3); color:var(--est-texto);}
+:where(input[type=checkbox],input[type=radio]){accent-color:var(--est-acento); width:14px; height:14px; cursor:pointer;}
+:where(input[type=color]){padding:2px; border:1px solid var(--est-borde-control); border-radius:var(--est-radio);
+  background:var(--est-sup-1); cursor:pointer;}
+input[type=color]::-webkit-color-swatch-wrapper{padding:0;}
+input[type=color]::-webkit-color-swatch{border:none; border-radius:var(--est-radio-sm);}
+
+/* deslizador: pista grafito; el relleno de acento sigue a --valor (0–100%) si el editor lo fija */
+:where(input[type=range]){-webkit-appearance:none; appearance:none; background:transparent; height:18px; padding:0;
+  cursor:pointer; min-width:40px; accent-color:var(--est-acento);}
+input[type=range]::-webkit-slider-runnable-track{height:4px; border-radius:var(--est-radio-redondo);
+  background:linear-gradient(to right,var(--est-acento-linea) var(--valor,0%),var(--est-borde-fuerte) var(--valor,0%));}
+input[type=range]::-moz-range-track{height:4px; border-radius:var(--est-radio-redondo); background:var(--est-borde-fuerte);}
+input[type=range]::-moz-range-progress{height:4px; border-radius:var(--est-radio-redondo); background:var(--est-acento-linea);}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; width:12px; height:12px; margin-top:-4px;
+  border-radius:50%; background:var(--est-texto); border:2px solid var(--est-sup-2);
+  box-shadow:0 0 0 1px var(--est-borde-fuerte); transition:transform .1s;}
+input[type=range]::-moz-range-thumb{width:10px; height:10px; border-radius:50%; background:var(--est-texto);
+  border:2px solid var(--est-sup-2);}
+input[type=range]:hover::-webkit-slider-thumb{transform:scale(1.15);}
+input[type=range]:focus-visible{outline:none;}
+input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:var(--est-foco);}
+
+/* ============================== botones ============================== */
+.est-boton{display:inline-flex; align-items:center; justify-content:center; gap:6px; height:var(--est-alto-control);
+  padding:0 10px; border-radius:var(--est-radio); border:1px solid transparent; background:transparent;
+  color:var(--est-texto-2); font:var(--est-peso-medio) var(--est-fs-base)/1 var(--est-fuente); white-space:nowrap;
+  cursor:pointer; text-decoration:none; transition:background .12s,color .12s,border-color .12s;}
+.est-boton:hover{background:var(--est-sup-hover); color:var(--est-texto);}
+.est-boton:active{background:var(--est-sup-activo);}
+.est-boton.on,.est-boton[aria-pressed=true]{background:var(--est-acento-suave); color:var(--est-texto);}
+.est-boton.on .ico,.est-boton[aria-pressed=true] .ico{color:var(--est-acento-linea);}
+.est-boton:disabled,.est-boton[aria-disabled=true]{color:var(--est-texto-off); background:transparent; cursor:default;}
+.est-boton--borde{background:var(--est-sup-4); border-color:var(--est-borde-control); color:var(--est-texto);}
+.est-boton--borde:hover{background:var(--est-sup-hover); border-color:var(--est-borde-fuerte);}
+.est-boton--primario{background:var(--est-acento); color:var(--est-texto-sobre-acento); font-weight:var(--est-peso-fuerte);}
+.est-boton--primario:hover{background:var(--est-acento-hover); color:var(--est-texto-sobre-acento);}
+.est-boton--primario:active{background:var(--est-acento);}
+.est-boton--fantasma{background:transparent;}
+.est-boton--icono{width:var(--est-alto-control); padding:0;}
+.est-boton--sm{height:var(--est-alto-control-sm); font-size:var(--est-fs-sm); padding:0 8px;}
+.est-boton--sm.est-boton--icono{width:var(--est-alto-control-sm); padding:0;}
+
+/* ============================== cabecera ============================== */
+.est-cabecera{display:flex; align-items:center; gap:var(--est-esp-1); height:var(--est-alto-cabecera);
+  padding:0 var(--est-esp-2); background:var(--est-sup-2); border-bottom:1px solid var(--est-borde);
+  position:relative; z-index:50;}
+.est-cabecera__titulo{display:flex; align-items:center; gap:8px; font:var(--est-peso-fuerte) var(--est-fs-md)/1 var(--est-fuente);
+  color:var(--est-texto); white-space:nowrap; padding-right:var(--est-esp-2);}
+.est-cabecera__titulo::before{content:""; width:8px; height:8px; border-radius:50%; background:var(--est-acento-linea); flex:none;}
+.est-cabecera__sub{font-weight:400; font-size:var(--est-fs-sm); color:var(--est-texto-3);}
+.est-sep{width:1px; height:20px; background:var(--est-borde-control); margin:0 var(--est-esp-1); flex:none;}
+.est-grupo{display:flex; align-items:center; gap:2px;}
+.est-empuje{flex:1;}
+.est-cifra{font-variant-numeric:tabular-nums; color:var(--est-texto-2); font-size:var(--est-fs-sm);
+  min-width:44px; text-align:center;}
+
+/* ================================ riel ================================ */
+.est-riel{display:flex; flex-direction:column; align-items:center; gap:2px; padding:var(--est-esp-2) 0;
+  width:var(--est-ancho-riel); background:var(--est-sup-2); border-right:1px solid var(--est-borde);}
+.est-riel__boton{position:relative; width:40px; height:40px; border-radius:var(--est-radio); display:grid;
+  place-items:center; color:var(--est-texto-3); background:transparent; border:none; cursor:pointer;
+  transition:background .12s,color .12s;}
+.est-riel__boton .ico{width:20px; height:20px;}
+.est-riel__boton:hover{color:var(--est-texto); background:var(--est-sup-hover);}
+.est-riel__boton.on{color:var(--est-texto); background:var(--est-sup-4);}
+.est-riel__boton.on::before{content:""; position:absolute; left:-4px; top:10px; bottom:10px; width:2px;
+  border-radius:2px; background:var(--est-acento-linea);}
+
+/* =============================== paneles =============================== */
+.est-panel{background:var(--est-sup-2); display:flex; flex-direction:column; min-height:0;}
+.est-panel__cabecera{display:flex; align-items:center; gap:var(--est-esp-2); height:36px; padding:0 var(--est-esp-3);
+  border-bottom:1px solid var(--est-borde); flex:none;}
+.est-panel__titulo,.est-seccion__titulo{font:var(--est-peso-fuerte) var(--est-fs-xs)/1.2 var(--est-fuente);
+  letter-spacing:.06em; text-transform:uppercase; color:var(--est-texto-3); display:flex; align-items:center; gap:6px;}
+.est-panel__cuerpo{flex:1; min-height:0; overflow-y:auto; padding:var(--est-esp-3);}
+.est-seccion{padding:var(--est-esp-3) 0; border-bottom:1px solid var(--est-borde);}
+.est-seccion:first-child{padding-top:0;}
+.est-seccion:last-child{border-bottom:none;}
+.est-seccion__titulo{margin-bottom:var(--est-esp-2);}
+
+/* ============================== pestañas ============================== */
+.est-pestanas{display:flex; gap:var(--est-esp-1); padding:0 var(--est-esp-2); border-bottom:1px solid var(--est-borde); flex:none;}
+.est-pestana{position:relative; padding:10px 8px; background:none; border:none; cursor:pointer; color:var(--est-texto-3);
+  font:var(--est-peso-fuerte) var(--est-fs-sm)/1 var(--est-fuente);}
+.est-pestana:hover{color:var(--est-texto);}
+.est-pestana.on{color:var(--est-texto);}
+.est-pestana.on::after{content:""; position:absolute; left:6px; right:6px; bottom:-1px; height:2px;
+  border-radius:2px 2px 0 0; background:var(--est-acento-linea);}
+
+/* ============================ segmentado ============================ */
+.est-segmentado{display:inline-flex; padding:2px; gap:2px; background:var(--est-sup-1);
+  border:1px solid var(--est-borde-control); border-radius:var(--est-radio);}
+.est-segmentado>button{flex:1; height:22px; padding:0 8px; border:none; border-radius:var(--est-radio-sm);
+  background:transparent; color:var(--est-texto-3); font:var(--est-peso-medio) var(--est-fs-sm)/1 var(--est-fuente); cursor:pointer;}
+.est-segmentado>button:hover{color:var(--est-texto);}
+.est-segmentado>button.on{background:var(--est-sup-activo); color:var(--est-texto);}
+
+/* ================================ filas ================================ */
+.est-fila{display:flex; align-items:center; gap:var(--est-esp-2); margin-bottom:var(--est-esp-2);}
+.est-fila>label{flex:none; width:72px; color:var(--est-texto-3); font-size:var(--est-fs-sm);}
+
+/* ================================ menús ================================ */
+.est-menu{position:fixed; z-index:120; min-width:220px; padding:4px; background:var(--est-sup-3);
+  border:1px solid var(--est-borde-control); border-radius:var(--est-radio); box-shadow:var(--est-sombra-menu);}
+.est-menu__item{display:flex; align-items:center; gap:8px; width:100%; padding:7px 10px; border:none; background:none;
+  border-radius:var(--est-radio-sm); color:var(--est-texto); font:var(--est-fs-base)/1.35 var(--est-fuente);
+  text-align:left; cursor:pointer;}
+.est-menu__item:hover{background:var(--est-sup-hover);}
+.est-menu__item small{display:block; color:var(--est-texto-3); font-size:var(--est-fs-xs);}
+.est-menu__sep{height:1px; margin:4px 2px; background:var(--est-borde-control);}
+
+/* ======================= chips, insignias, notas ======================= */
+.est-chip{display:inline-flex; align-items:center; gap:4px; height:22px; padding:0 9px; border-radius:var(--est-radio-redondo);
+  background:var(--est-sup-4); border:1px solid var(--est-borde-control); color:var(--est-texto-2);
+  font:var(--est-peso-medio) var(--est-fs-xs)/1 var(--est-fuente); cursor:pointer; white-space:nowrap;}
+.est-chip:hover{color:var(--est-texto); border-color:var(--est-borde-fuerte);}
+.est-chip.on{background:var(--est-acento); border-color:transparent; color:var(--est-texto-sobre-acento);}
+.est-insignia{display:inline-flex; align-items:center; height:16px; padding:0 6px; border-radius:var(--est-radio-redondo);
+  background:var(--est-sup-4); color:var(--est-texto-2); font:var(--est-peso-fuerte) 10px/1 var(--est-fuente);
+  font-variant-numeric:tabular-nums;}
+.est-nota{font-size:var(--est-fs-xs); line-height:1.5; color:var(--est-texto-3);}
+.est-caja-aviso,.est-caja-exito{display:flex; gap:8px; align-items:flex-start; padding:8px 10px; border-radius:var(--est-radio);
+  font-size:var(--est-fs-sm); line-height:1.45;}
+.est-caja-aviso{background:var(--est-aviso-suave); color:var(--est-texto); border:1px solid color-mix(in srgb,var(--est-aviso) 40%,transparent);}
+.est-caja-aviso .ico{color:var(--est-aviso);}
+.est-caja-exito{background:var(--est-exito-suave); color:var(--est-texto); border:1px solid color-mix(in srgb,var(--est-exito) 40%,transparent);}
+.est-caja-exito .ico{color:var(--est-exito);}
+
+/* ================================ modal ================================ */
+.est-modal-fondo{position:fixed; inset:0; z-index:95; display:none; place-items:center;
+  background:color-mix(in srgb,var(--grafito-950) 72%,transparent); backdrop-filter:blur(2px);}
+.est-modal-fondo.on{display:grid;}
+.est-modal{background:var(--est-sup-2); border:1px solid var(--est-borde-control); border-radius:var(--est-radio);
+  box-shadow:var(--est-sombra-modal); padding:var(--est-esp-5); max-height:88vh; overflow:auto; color:var(--est-texto);}
+.est-modal h3{font:var(--est-peso-fuerte) var(--est-fs-lg)/1.3 var(--est-fuente); margin:0 0 var(--est-esp-3);}
+
+/* =============================== lienzo =============================== */
+.est-lienzo{background-color:var(--est-damero-b);
+  background-image:linear-gradient(45deg,var(--est-damero-a) 25%,transparent 25%,transparent 75%,var(--est-damero-a) 75%),
+                   linear-gradient(45deg,var(--est-damero-a) 25%,transparent 25%,transparent 75%,var(--est-damero-a) 75%);
+  background-size:var(--est-damero-tam) var(--est-damero-tam);
+  background-position:0 0,calc(var(--est-damero-tam) / 2) calc(var(--est-damero-tam) / 2);}
+
+/* =========================== barra de estado =========================== */
+.est-estado{display:flex; align-items:center; gap:var(--est-esp-4); height:var(--est-alto-estado);
+  padding:0 var(--est-esp-3); background:var(--est-sup-2); border-top:1px solid var(--est-borde);
+  color:var(--est-texto-3); font-size:var(--est-fs-xs); font-variant-numeric:tabular-nums; white-space:nowrap; overflow:hidden;}
+.est-estado>*{display:inline-flex; align-items:center; gap:5px;}
+.est-estado b{color:var(--est-texto-2); font-weight:var(--est-peso-medio);}
+
+/* =========================== línea de tiempo =========================== */
+.est-linea-tiempo{display:flex; flex-direction:column; background:var(--est-sup-2); border-top:1px solid var(--est-borde); min-height:0;}
+.est-regla-tiempo{height:22px; margin-left:var(--est-ancho-cabeza-pista); position:relative; border-bottom:1px solid var(--est-borde);
+  color:var(--est-texto-3); font:10px/22px var(--est-fuente); font-variant-numeric:tabular-nums;
+  background-image:linear-gradient(to right,var(--est-borde-fuerte) 1px,transparent 1px); background-size:var(--est-paso-regla,50px) 6px;
+  background-repeat:repeat-x; background-position:0 100%;}
+.est-pista{display:flex; height:var(--est-alto-pista); border-bottom:1px solid var(--est-borde);}
+.est-pista__cabeza{width:var(--est-ancho-cabeza-pista); flex:none; display:flex; align-items:center; gap:4px; padding:0 8px;
+  background:var(--est-sup-3); border-right:1px solid var(--est-borde); color:var(--est-texto-2); font-size:var(--est-fs-sm);}
+.est-pista__carril{position:relative; flex:1; background:var(--est-sup-1);}
+.est-clip{position:absolute; top:4px; bottom:4px; border-radius:var(--est-radio-sm); overflow:hidden; cursor:grab;
+  background:var(--est-sup-activo); border:1px solid var(--est-borde-fuerte); color:var(--est-texto);
+  font-size:var(--est-fs-xs); padding:2px 6px; white-space:nowrap;}
+.est-clip.sel{border-color:var(--est-acento-linea); box-shadow:inset 0 0 0 1px var(--est-acento-linea);}
+.est-cabezal{position:absolute; top:0; bottom:0; width:1px; background:var(--est-texto); pointer-events:none; z-index:5;}
+.est-cabezal::before{content:""; position:absolute; top:0; left:-5px; border:5px solid transparent;
+  border-top:7px solid var(--est-texto);}
+
+/* ================================ aviso flotante ================================ */
+.est-toast{position:fixed; left:50%; bottom:40px; transform:translateX(-50%); z-index:200; max-width:80vw;
+  padding:8px 14px; border-radius:var(--est-radio); background:var(--est-sup-3); color:var(--est-texto);
+  border:1px solid var(--est-borde-control); box-shadow:var(--est-sombra-menu); font-size:var(--est-fs-base);
+  opacity:0; transition:opacity .2s; pointer-events:none;}
+
+/* =========================================================================================================
+   COMPATIBILIDAD: las variables con que nacieron los dos editores (y que su JS escribe en estilos en línea)
+   apuntan a los tokens. Código nuevo: --est-*.
+   ========================================================================================================= */
+:root{
+  /* editor.html */
+  --ui-bg:var(--est-sup-1); --ui-panel:var(--est-sup-2); --ui-panel2:var(--est-sup-4); --ui-line:var(--est-borde-control);
+  --ui-bd:var(--est-borde-control); --ui-text:var(--est-texto); --ui-fg:var(--est-texto-2); --ui-mut:var(--est-texto-3);
+  --ui-acc:var(--est-acento); --ui-acc2:var(--est-acento); --ui-gold:var(--est-aviso); --ui-sel:var(--est-seleccion);
+  /* media.html */
+  --ui-borde:var(--est-borde-control); --ui-texto:var(--est-texto); --ui-texto2:var(--est-texto-3);
+}
+
+/* =========================================================================================================
+   TELÉFONO (≤ 760 px): ver, elegir y exportar (estudio-movil.js marca los paneles con data-movil-panel).
+   Los paneles pasan a cajones, la cabecera se desliza de lado y los controles crecen para el dedo.
+   ========================================================================================================= */
+.est-movil-boton{display:none !important;}
+@media (max-width:760px){
+  .est-cabecera{overflow-x:auto; overflow-y:hidden; flex-wrap:nowrap; scrollbar-width:none; padding-left:4px; padding-right:4px;}
+  .est-cabecera::-webkit-scrollbar{display:none;}
+  .est-cabecera > *{flex:none;}
+  .est-cabecera .txt,.est-cabecera__sub,.est-cabecera__titulo small{display:none;}
+  .est-boton,.est-riel__boton,.est-pestana,.est-chip{min-height:40px;}
+  .est-boton--icono,.est-riel__boton{min-width:40px;}
+  input[type=range]{min-height:32px;}
+  .est-movil-boton{display:inline-flex !important;}
+  [data-movil-panel]{position:fixed !important; z-index:70; top:var(--est-alto-cabecera); bottom:0; display:block !important;
+    width:min(88vw,360px) !important; max-width:none; overflow-y:auto; background:var(--est-sup-2);
+    box-shadow:var(--est-sombra-modal); transition:transform .2s ease; visibility:hidden;}
+  [data-movil-panel="izq"]{left:0; transform:translateX(-105%);}
+  [data-movil-panel="der"]{right:0; left:auto; transform:translateX(105%);}
+  [data-movil-panel].abierto{transform:none; visibility:visible;}
+  [data-movil-panel] > .est-movil-cerrar{position:sticky; top:4px; float:right; z-index:2; margin:4px;}
+}

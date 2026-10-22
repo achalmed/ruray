@@ -1,0 +1,22 @@
+# pyproject.toml — el paquete de Python de Ruray (la base común de los editores del estudio): dependencias y pruebas
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ruray"
+version = "0.1.0"
+description = "Ruray: la base común de los editores del estudio de la plataforma Qillqa (el servidor del estudio portado a FastAPI, sus rutas comunes, la cookie de cada editor y el puente con la Mediateca)."
+readme = "README.md"
+license = "AGPL-3.0-only"
+requires-python = ">=3.11"
+dependencies = ["tiqsi", "fastapi>=0.110", "pydantic-settings>=2", "PyJWT>=2.8", "Pillow>=10", "PyYAML>=6"]
+
+[project.optional-dependencies]
+pruebas = ["pytest>=8", "httpx>=0.27"]
+
+[tool.setuptools]
+packages = ["ruray"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "estudio/tests"]

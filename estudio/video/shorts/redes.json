@@ -1,0 +1,17 @@
+{
+  "_": "video/shorts/redes.json — ajustes de exportación por red para los cortes verticales (shorts.py). Datos de las apps, no de la marca: se revisan por versión.",
+  "comun": {
+    "px": [1080, 1920],
+    "fps": 30,
+    "video": {"codec": "libx264", "crf": 20, "preset": "medium", "pix_fmt": "yuv420p", "perfil": "high"},
+    "audio": {"codec": "aac", "bitrate": "160k", "muestreo": 48000},
+    "sonoridad": {"lufs": -14, "pico_verdadero_db": -1.5, "rango_lra": 11}
+  },
+  "redes": {
+    "reels":    {"nombre": "Instagram Reels",   "max_s": 90,  "recomendado_s": [30, 60]},
+    "facebook": {"nombre": "Facebook Reels",    "max_s": 90,  "recomendado_s": [30, 60]},
+    "tiktok":   {"nombre": "TikTok",            "max_s": 600, "recomendado_s": [30, 90]},
+    "shorts":   {"nombre": "YouTube Shorts",    "max_s": 180, "recomendado_s": [30, 60]},
+    "estados":  {"nombre": "Estados de WhatsApp", "max_s": 60, "recomendado_s": [15, 60]}
+  }
+}
